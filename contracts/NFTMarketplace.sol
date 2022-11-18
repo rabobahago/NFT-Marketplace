@@ -23,4 +23,9 @@ contract NFTMarketplace {
         bool currentLsited;
     }
     mapping(uint256 => listedToken) private idToListedToken;
+
+    function updatedListPrice(uint256 _listPrice) public payable {
+        require(listprice = msg.sender, "only owner can up listing price");
+        listprice = _listPrice;
+    }
 }
