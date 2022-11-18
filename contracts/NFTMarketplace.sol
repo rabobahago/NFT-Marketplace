@@ -67,4 +67,29 @@ contract NFTMarketplace {
         createListedToken(currentTokenId, price);
         return currentTokenId;
     }
+
+    function createListedToken(uint256 tokenId, uint256 price) private {
+        idToListedToken[tokenId] = listedToken(
+            tokenId,
+            payable(address(this)),
+            payable(msg.sender),
+            price,
+            true
+        );
+        _transfer(msg.sender, address(this), tokenId);
+    }
+
+    function getAllNFTs() public view returns (listedToken[] memory) {
+        int256 nftCount = _tokenIds.current();
+        listedToken[] memory tokens = new listedToken[](nftCount);
+        uint currentIndex = 0;
+
+        for (uint i = 0; i < nftCount; i++) {
+            uint256 currentId = i + 1;
+            listedToken storage currentItem = idToListedToken[currentId];
+            tokens[currentIndex] = currentItem;
+            currentIndex += 1;
+        }
+        return tokens;
+    }
 }
