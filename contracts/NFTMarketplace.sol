@@ -5,7 +5,22 @@ import "@openzepellin/contracts/token/ERC721/extensions/ERC721URIStorage";
 import "@openzepellin/contracts/token/ERC721/ERC721.sol";
 
 contract NFTMarketplace {
+    address payable owner;
+    using Counters for Counters.Counter;
+    Counters.Counter private _tokenIds;
+    Counters.Counter private _itemsSold;
+    uint256 listprice = 0.01 ether;
+
     constructor() ERC721("NFTMarketplace", "NFTR") {
         owner = payable(msg.sender);
     }
+
+    struct listedToken {
+        uint256 tokenId;
+        address payable owner;
+        address payable sender;
+        uint256 price;
+        bool currentLsited;
+    }
+    mapping(uint256 => listedToken) private idToListedToken;
 }
