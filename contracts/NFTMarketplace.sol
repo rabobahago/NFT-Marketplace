@@ -53,4 +53,18 @@ contract NFTMarketplace {
     function getCurrentToken() public view returns (uint256) {
         return _tokenIds.current();
     }
+
+    function createToken(string memory tokenURI, uint256 price) public payable {
+        require(msg.value == listPrice, "send enough ether to list");
+        require(msg.value > 0, "ether price must be positive");
+        _tokenIds.increment();
+        uint256 currentTokenId = _tokenIds.current();
+        //_safeMint make sure that the contract to send the token has the necessary capability to receive ether
+        _safeMint(msg.sender, currentTokenId);
+        //set current token to tokenURI that is coming from the frontend
+        _setTokenURI(currentTokenId, tokenURI);
+        //pass to createListedToken currentTokenId and price
+        createListedToken(currentTokenId, price);
+        return currentTokenId;
+    }
 }
